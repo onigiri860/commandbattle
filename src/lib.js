@@ -332,6 +332,9 @@ class GameManage
 				// 敵の場合は画像を削除
 				if(characters[c].type === "enemy") {
 					document.getElementById("enemyImage" + c).remove();
+					
+					// 新しい画像を表示する maguro.png
+					enemyImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/command_battle/img/maguro.png" style="position:absolute; left:50px; bottom:50px">';
 				}
 			}
 		}
