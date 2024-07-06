@@ -121,20 +121,29 @@ class Hero
 	}
 
 	// 攻撃する
-	attack()
+	async attack()
 	{
 		// 攻撃相手が生存していれば攻撃する
 		if(this.target.liveFlag) {
+			// 主人公の画像を上に移動させる
+			document.getElementById("heroImage").style.transform = "translateY(-50px)";
+	
+			// 1秒待つ
+			await new Promise(resolve => setTimeout(resolve, 1000));
+	
+			// 主人公の画像を元に戻す
+			document.getElementById("heroImage").style.transform = "translateY(0)";
+	
 			// 敵の体力から、自分の攻撃力を引く
 			this.target.hp -= this.offense;
-
+	
 			// 攻撃相手の体力がマイナスになる場合は、0にする
 			if(this.target.hp < 0) {
 				this.target.hp = 0;
 			}
-
+	
 			Message.printMessage(this.name + "の攻撃<br>" +
-			                     this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+								 this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
 		}
 		else {
 			Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
@@ -233,6 +242,18 @@ class Fish extends Enemy
 		else {
 			Message.printMessage(this.name + "の攻撃・・・<br>" + f.name + "は倒れている<br>");
 		}
+	}
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 調理後画像クラス
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+class CookedFish extends Enemy
+{
+	// コンストラクタ
+	constructor(name, path)
+	{
+		super(name, 0, 0, 0, path);
 	}
 }
 

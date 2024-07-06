@@ -1,7 +1,7 @@
 // キャラクターをインスタンス化する
-let hero = new Hero("シェフ", 200, 50, 20, 3, 30, "C:/Battle_js/command_battle/img/chef.png");  // 主人公
-let enemy = new Fish("さかな", 150, 40, 10, "C:/Battle_js/command_battle/img/sakana.png");      // 敵
-let enemy2 = new Fish("まぐろ", "C:/Battle_js/command_battle/img/maguro.png");      // まぐろ
+let hero = new Hero("シェフ", 200, 50, 20, 3, 30, "C:/Battle_js/commandbattle/img/chef.png");  // 主人公
+let enemy = new Fish("さかな", 150, 40, 10, "C:/Battle_js/commandbattle/img/sakana.png");      // 敵
+let enemy2 = new Fish("まぐろ", "C:/Battle_js/commandbattle/img/maguro.png");      // まぐろ
 
 // キャラクター配列をつくる
 let characters = [];
