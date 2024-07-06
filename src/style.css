@@ -18,7 +18,7 @@ div {
     height: 540px;
     flex-direction: column; /* 子要素を縦に並べる */
     align-items: center; /* 子要素を中央に配置 */
-    background-image: url("C:/Battle_js/commandbattle/img/back.png"); /* 背景画像を設定 */
+    background-image: url("../img/back.png"); /* 背景画像を設定 */
     background-size: cover; /* 背景画像をコンテナに合わせて表示 */
 }
 
