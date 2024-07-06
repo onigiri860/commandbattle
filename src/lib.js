@@ -334,7 +334,7 @@ class GameManage
 					document.getElementById("enemyImage" + c).remove();
 					
 					// 新しい画像を表示する maguro.png
-					enemyImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/command_battle/img/maguro.png" style="position:absolute; left:50px; bottom:50px">';
+					enemyImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/commandbattle/img/maguro.png" style="position:absolute; left:50px; bottom:50px">';
 				}
 			}
 		}
