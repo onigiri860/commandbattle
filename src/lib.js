@@ -136,7 +136,10 @@ class Hero
 	
 			// 敵の体力から、自分の攻撃力を引く
 			this.target.hp -= this.offense;
-	
+			
+			// 敵の体力バーを変更する
+			alterLife_enemy(-this.offense);
+
 			// 攻撃相手の体力がマイナスになる場合は、0にする
 			if(this.target.hp < 0) {
 				this.target.hp = 0;
@@ -167,6 +170,9 @@ class Hero
 		
 		// 回復する値
 		let heal = this.herbPower;
+
+		// 自分の体力バーを変更する
+		alterLife_hero(+this.herbPower);
 
 		// 最大体力を超えて回復してしまいそうな場合
 		if(this.maxHp - this.hp < this.herbPower) {
@@ -228,6 +234,9 @@ class Fish extends Enemy
 
 		// 攻撃対象の体力から、自分の攻撃力を引く
 		f.hp -= this.offense;
+
+		// 攻撃対象の体力バーを変更する
+		alterLife_hero(-this.offense);
 
 		// 攻撃相手の体力がマイナスになる場合は0にする
 		if(f.hp < 0) {
