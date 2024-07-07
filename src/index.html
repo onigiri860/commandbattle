@@ -16,6 +16,20 @@
         <div id="commandView"></div>
         <div id="messageView"></div>
     </div>
+    <div><input type="range" min="0" max="100" value="20"
+        id="inputSlider" />
+    </div>
+    <div>
+        <p id="inputSliderResult"></p>
+    </div>
+    <div id="life-frame">
+        <div id="life-bar"></div>
+        <div id="life-mark"></div>
+    </div>
+    <div id="btns-wrap">
+        <div id="increase-btn" onclick="alterLife( 10 )">+</div>
+        <div id="decrease-btn" onclick="alterLife( -10 )">-</div>
+    </div>
 </div>
 <script type="text/javascript" src="lib.js"></script>
 <script type="text/javascript" src="game.js"></script>
