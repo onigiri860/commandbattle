@@ -9,6 +9,7 @@
 
 キャラクターの動き(アニメーション)にもっと滑らかさを
  - 参照("https://fastcoding.jp/blog/all/info/animation-4/")
+ - (https://web-breeze.net/life-gauge/)
 
 体力バーの表示
  - 体力に応じて表示する画像を変更することで対処しようと思う
@@ -25,3 +26,8 @@
 攻撃の種類の追加
 
 エフェクトなどの追加
+
+画像処理サイト
+https://www.iloveimg.com/ja
+https://jpg2png.com/ja/#google_vignette
+https://www.remove.bg/ja/upload
