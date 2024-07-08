@@ -53,22 +53,32 @@ div {
 }
 
 /* 主人公画像ビュー  */
-#heroImageView {
+/*#heroImageView {
     width: 300px;
     height: 240px;
     border: 3px solid;
     border-color: red;
     border-radius: 6px;
-}
+}*/
 
 /* 敵画像ビュー */
-#enemyImageView {
+/*#enemyImageView {
     width: 300px;
     height: 240px;
     border: 3px solid;
     border-color: blue;
     border-radius: 6px;
+}*/
+
+/* 主人公と敵画像ビュー  */
+#ImageView {
+    width: 600px;
+    height: 240px;
+    border: 3px solid;
+    border-color: green;
+    border-radius: 6px;
 }
+
 
 /* コマンドビューとメッセージビューを含むコンテナ */
 #CMContainer {

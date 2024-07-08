@@ -17,6 +17,12 @@ class Hero
 		this.herbPower = herbPower;  // 薬草の回復力
         this.path = path;            // 画像の場所
 
+		//this.Hpercent = 100/this.maxHp; // hero体力バーの1%の値
+		//this.Epercent = 100/this.target.maxHp; // enemy体力バーの1%の値
+
+		//this.HPoffense = offense*this.Hpercent; // hero体力バーの1%の値にするため、攻撃力をかける
+		//this.EPoffense = offense*this.Epercent; // enemy体力バーの1%の値にするため、攻撃力をかける
+
 		this.command = "";           // 選択されたコマンド
 		this.target = "";            // ターゲット
 	}
@@ -125,22 +131,16 @@ class Hero
 	{
 		// 攻撃相手が生存していれば攻撃する
 		if(this.target.liveFlag) {
-			// 主人公の画像を上に移動させる
-			document.getElementById("heroImage").style.transform = "translateY(-50px)";
-	
-			// 1秒待つ
-			await sleep(1000);
-	
-			// 主人公の画像を元に戻す
-			document.getElementById("heroImage").style.transform = "translateY(0)";
+						
+			this.move(); // 攻撃時のキャラの移動
 	
 			// 敵の体力から、自分の攻撃力を引く
 			this.target.hp -= this.offense;
 			
 			// 敵の体力バーを変更する
-			alterLife_enemy(-(this.offense)*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
+			alterLife_enemy(-this.offense*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
 												   // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
-
+		
 			// 攻撃相手の体力がマイナスになる場合は、0にする
 			if(this.target.hp < 0) {
 				this.target.hp = 0;
@@ -152,6 +152,36 @@ class Hero
 		else {
 			Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
 		}
+	}
+	
+	//攻撃時のキャラの移動
+	async move() {
+		// wave.pngを表示する
+		ImageView.innerHTML += '<img id="wave" src="../img/wave.png" style="position:absolute; left:250px; bottom:50px">';
+
+		// 主人公の画像を右に移動させる
+		for(let i = 0; i < 30; i++) {
+			//document.getElementById("heroImage").style.transform = "translateX(" + i + "px)";
+			document.getElementById("wave").style.transform = "translateX(" + i + "px)";
+			await sleep(10);
+		}
+		// effct1の画像を表示する
+		ImageView.innerHTML += '<img id="effect1" src="../img/effect1.png" style="position:absolute; left:350px; bottom:50px">';
+
+		// 主人公の画像を上に移動させる
+		document.getElementById("heroImage").style.transform = "translateY(-50px)";
+	
+		// 1秒待つ
+		await sleep(1000);
+	
+		// 主人公の画像を元に戻す
+		document.getElementById("heroImage").style.transform = "translateY(0)";
+	
+		// effct1の画像を削除する
+		document.getElementById("effect1").remove();
+
+		// wave.pngを削除する
+		document.getElementById("wave").remove();
 	}
 
 	// 回復する
@@ -173,7 +203,7 @@ class Hero
 		let heal = this.herbPower;
 
 		// 自分の体力バーを変更する
-		alterLife_hero(+this.herbPower);
+		alterLife_hero(+heal*0.5); // 体力を100としたときの回復力にするため、0.67をかける
 
 		// 最大体力を超えて回復してしまいそうな場合
 		if(this.maxHp - this.hp < this.herbPower) {
@@ -244,7 +274,7 @@ class Fish extends Enemy
 		f.hp -= this.offense;
 
 		// 攻撃対象の体力バーを変更する
-		alterLife_hero(-this.offense);
+		alterLife_hero(-this.offense*0.5);
 
 		// 攻撃相手の体力がマイナスになる場合は0にする
 		if(f.hp < 0) {
@@ -336,7 +366,7 @@ class GameManage
     // 主人公の画像を表示する
     showHeroImage() {
         if (characters[0].type === "hero") {
-            heroImageView.innerHTML += '<img id="heroImage" src="' + characters[0].path 
+            ImageView.innerHTML += '<img id="heroImage" src="' + characters[0].path 
             + '" style="position:absolute; left:100px; bottom:0px">';
         }
     }
@@ -346,8 +376,8 @@ class GameManage
 	{
 		for(let c in characters) {
 			if(characters[c].type === "enemy") {
-				enemyImageView.innerHTML += '<img id="enemyImage' + c + '" src="' + characters[c].path
-				+ '" style="position:absolute; left:50px; bottom: 50px">';
+				ImageView.innerHTML += '<img id="enemyImage' + c + '" src="' + characters[c].path
+				+ '" style="position:absolute; left:350px; bottom: 50px">';
 			}
 		}
 	}
@@ -373,7 +403,7 @@ class GameManage
 					document.getElementById("enemyImage" + c).remove();
 					
 					// 新しい画像を表示する maguro.png
-					enemyImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/commandbattle/img/maguro.png" style="position:absolute; left:50px; bottom:50px">';
+					ImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/commandbattle/img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
 				}
 			}
 		}
