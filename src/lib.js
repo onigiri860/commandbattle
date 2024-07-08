@@ -129,7 +129,7 @@ class Hero
 			document.getElementById("heroImage").style.transform = "translateY(-50px)";
 	
 			// 1秒待つ
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			await sleep(1000);
 	
 			// 主人公の画像を元に戻す
 			document.getElementById("heroImage").style.transform = "translateY(0)";
@@ -138,7 +138,8 @@ class Hero
 			this.target.hp -= this.offense;
 			
 			// 敵の体力バーを変更する
-			alterLife_enemy(-this.offense);
+			alterLife_enemy(-(this.offense)*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
+												   // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
 
 			// 攻撃相手の体力がマイナスになる場合は、0にする
 			if(this.target.hp < 0) {
@@ -204,6 +205,13 @@ class Enemy
 		this.offense = offense;  // 攻撃力
 		this.speed = speed;      // 素早さ
 		this.path = path         // 画像の場所
+	}
+
+	// 表示用のパラメータを返す
+	getMainParameter()
+	{
+		return "<b>" + this.name + "</b><br>"
+		       + "体力 " + this.hp + "<br>";
 	}
 
 	// 行動する
@@ -316,10 +324,11 @@ class GameManage
 			}
 		}
 
-		// 敵のパラメータをコンソールに表示する（デバッグ用）
+		// 敵のパラメータをコンソールに表示する
 		for(let c in characters) {
 			if(characters[c].type === "enemy" ) {
-				console.log(characters[c].name + " " + characters[c].hp);
+				parameterView.innerHTML += '<div class="parameter">' +
+				                           characters[c].getMainParameter() + '</div>';
 			}
 		}
 	}

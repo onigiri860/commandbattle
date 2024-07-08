@@ -42,7 +42,7 @@ inputSlider.addEventListener("change", (e) => {
 // 体力バーの表示
 const lifeBar_hero = document.getElementById('herolife-bar')         // ライフバー
 const lifeMark_hero = document.getElementById('herolife-mark')       // ライフの光部分
-let life_hero = 100                                                  // ライフ初期値
+let life_hero = 100                                            // ライフ初期値
 lifeBar_hero.style.width = "100%"                                // ライフ初期幅
 
 // *** ライフ変更処理 ***

@@ -9,8 +9,18 @@
 <div id="gameContainer">
     <div id="parameterView"></div>
     <div id="imageContainer">
-        <div id="heroImageView" style="position: relative"></div> <!-- 主人公画像の要素 -->
-        <div id="enemyImageView" style="position: relative"></div>
+        <div id="heroImageView" style="position: relative">
+            <div id="herolife-frame">
+                <div id="herolife-bar"></div>
+                <div id="herolife-mark"></div>
+            </div>
+        </div> <!-- 主人公画像の要素 -->
+        <div id="enemyImageView" style="position: relative">
+            <div id="enemylife-frame">
+                <div id="enemylife-bar"></div>
+                <div id="enemylife-mark"></div>
+            </div>
+        </div>
     </div>
     <div id="CMContainer">
         <div id="commandView"></div>
@@ -21,14 +31,6 @@
     </div>
     <div>
         <p id="inputSliderResult"></p>
-    </div>
-    <div id="herolife-frame">
-        <div id="herolife-bar"></div>
-        <div id="herolife-mark"></div>
-    </div>
-    <div id="enemylife-frame">
-        <div id="enemylife-bar"></div>
-        <div id="enemylife-mark"></div>
     </div>
 </div>
 <script type="text/javascript" src="lib.js"></script>

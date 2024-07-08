@@ -31,3 +31,6 @@
 https://www.iloveimg.com/ja
 https://jpg2png.com/ja/#google_vignette
 https://www.remove.bg/ja/upload
+
+それぞれフレームとして100pxしか幅をとっていないため150とか200にするとバグが発生
+割合を利用できるかも
