@@ -82,13 +82,30 @@ class Hero
 		}
 		// 敵が選択されたとき
 		else if(this.command.includes("enemyCommand")) {
-    		// 攻撃の種類を表示するためのHTML
-    		let attackTypeHTML = [];
-			attackTypeHTML.push('<div class="panchiCommand" onclick="selectAttackType(\'打撃\')">打撃</div>');
-			attackTypeHTML.push('<div class="slashingCommand" onclick="selectAttackType(\'斬撃\')">斬撃</div>');
-    		attackTypeHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
+    		// 攻撃の種類を定義する
+			const attackTypes = [
+				{ type: '打撃', className: 'panchiCommand' },
+				{ type: '斬撃', className: 'slashingCommand' }
+			];
 
-    		return attackTypeHTML;
+			// 攻撃の種類を表示するためのHTMLを生成する
+			let attackTypeHTML = attackTypes.map(attack => {
+				// div要素を作成
+				let div = document.createElement('div');
+				div.className = attack.className;
+				div.textContent = attack.type;
+
+				// クリックイベントリスナーを追加
+				div.addEventListener('click', () => selectAttackType(attack.type));
+
+				// outerHTMLを使用して文字列として返す
+				return div.outerHTML;
+			});
+
+			// ヒーロー名を先頭に追加
+			attackTypeHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
+
+			return attackTypeHTML;
 		}
 		// 攻撃の種類が選択されたとき
 		else if(this.command === "panchiCommand" || this.command === "slashingCommand") {
@@ -182,13 +199,18 @@ class Hero
 		
     	    this.move(); // 攻撃時のキャラの移動
 
-    	    // 敵の体力から、自分の攻撃力を引く
-    	    this.target.hp -= this.offense;
-		
-    	    // 敵の体力バーを変更する
-    	    alterLife_enemy(-this.offense*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
-    	                                           // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
-		
+			// 攻撃対象のクラスがFishのときの条件式
+			if(this.target instanceof Fish) {
+				// 体力200に対して100pxで表現するため、0.5をかける　変数名を変える
+				let fishhealth = this.offense*0.5;
+
+				// 敵の体力から、自分の攻撃力を引く
+				this.target.hp -= this.offense;
+
+				// 敵の体力バーを変更する
+				alterLife_enemy(-fishhealth); 
+			}
+
     	    // 攻撃相手の体力がマイナスになる場合は、0にする
     	    if(this.target.hp < 0) {
     	        this.target.hp = 0;
@@ -210,13 +232,18 @@ class Hero
 
 			this.move(); // 攻撃時のキャラの移動
 
-        	// 敵の体力から、自分の攻撃力を引く
-        	this.target.hp -= this.offense*2;
-        
-        	// 敵の体力バーを変更する
-        	alterLife_enemy(-this.offense*2); // 体力を100としたときの攻撃力にするため、0.67をかける
-        	                                       // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
-    
+			// 攻撃対象のクラスがFishのときの条件式
+			if(this.target instanceof Fish) {
+				// 体力200に対して100pxで表現するため、0.5をかける　変数名を変える
+				let fishhealth = this.offense*0.5;
+
+				// 敵の体力から、自分の攻撃力を引く
+				this.target.hp -= this.offense*2;
+
+				// 敵の体力バーを変更する
+				alterLife_enemy(-fishhealth*2); 
+			}
+
         	// 攻撃相手の体力がマイナスになる場合は、0にする
         	if(this.target.hp < 0) {
         	    this.target.hp = 0;
@@ -235,11 +262,16 @@ class Hero
 		// 打撃攻撃の場合
 		if(this.command === "panchiCommand") {
 			// wave.pngを表示する
-			ImageView.innerHTML += '<img id="wave" src="../img/wave.png" style="position:absolute; left:250px; bottom:50px">';
+			document.getElementById("wave").style.display = "block";
+			// wave.pngを右に移動させる
 			for(let i = 0; i < 30; i++) {
 				document.getElementById("wave").style.transform = "translateX(" + i + "px)";
 				await sleep(10);
 			}
+			// wave.pngを隠す
+			document.getElementById("wave").style.display = "none";
+			// wave.pngを元の位置に戻す
+			document.getElementById("wave").style.transform = "translateX(0px)";
 		}
 		// 斬撃攻撃の場合
 		else if(this.command === "slashingCommand") {
@@ -249,8 +281,8 @@ class Hero
 			}
 		}
 		
-		// effct1の画像を表示する
-		ImageView.innerHTML += '<img id="effect1" src="../img/effect1.png" style="position:absolute; left:350px; bottom:50px">';
+		// effct1.pngを表示する
+		document.getElementById("effect1").style.display = "block";
 
 		// 主人公の画像を上に移動させる
 		document.getElementById("heroImage").style.transform = "translateY(-50px)";
@@ -261,11 +293,9 @@ class Hero
 		// 主人公の画像を元に戻す
 		document.getElementById("heroImage").style.transform = "translateY(0)";
 	
-		// effct1の画像を削除する
-		document.getElementById("effect1").remove();
+		// effct1.pngを隠す
+		document.getElementById("effect1").style.display = "none";
 
-		// wave.pngを削除する
-		document.getElementById("wave").remove();
 	}
 
 	// 回復する
@@ -287,7 +317,7 @@ class Hero
 		let heal = this.herbPower;
 
 		// 自分の体力バーを変更する
-		alterLife_hero(+heal*0.5); // 体力を100としたときの回復力にするため、0.67をかける
+		alterLife_hero(+heal*0.5);
 
 		// 最大体力を超えて回復してしまいそうな場合
 		if(this.maxHp - this.hp < this.herbPower) {
@@ -408,6 +438,12 @@ class GameManage
 		// 敵の画像を表示する
 		this.showEnemyImage();
 
+		// 波の画像を表示する
+		this.showWaveImage();
+
+		// エフェクトの画像を表示する
+		this.showEffectImage();
+
 		// はじめのメッセージを表示する
 		this.showFirstMessage();
 	}
@@ -464,6 +500,22 @@ class GameManage
 				+ '" style="position:absolute; left:350px; bottom: 50px">';
 			}
 		}
+	}
+
+	// 波の画像を表示する
+	showWaveImage()
+	{
+		ImageView.innerHTML += '<img id="wave" src="../img/wave.png" style="position:absolute; left:250px; bottom:50px">';
+		// wave.pngを隠す
+		document.getElementById("wave").style.display = "none";
+	}
+
+	// エフェクトの画像を表示する
+	showEffectImage()
+	{
+		ImageView.innerHTML += '<img id="effect1" src="../img/effect1.png" style="position:absolute; left:350px; bottom:50px">';
+		// effct1.pngを隠す
+		document.getElementById("effect1").style.display = "none";
 	}
 
 	// 戦闘開始時のメッセージを表示する

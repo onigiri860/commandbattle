@@ -174,7 +174,7 @@ div {
     transition: 300ms
 }
 
-#herolife-mark {
+/*#herolife-mark {
     width: 3px;
     height: 3px;
     border-radius: 3px;
@@ -182,7 +182,7 @@ div {
     filter: saturate(500%);
     box-shadow: 0 0 5px 3px rgb(200, 255, 255),
                 0 0 7px 7px rgb(100, 255, 255);
-}
+}*/
 
 #enemylife-frame {
     position: absolute; 
@@ -200,7 +200,7 @@ div {
     transition: 300ms
 }
 
-#enemylife-mark {
+/*#enemylife-mark {
     width: 3px;
     height: 3px;
     border-radius: 3px;
@@ -208,4 +208,4 @@ div {
     filter: saturate(500%);
     box-shadow: 0 0 5px 3px rgb(200, 255, 255),
                 0 0 7px 7px rgb(255, 100, 100);
-}
+}*/
