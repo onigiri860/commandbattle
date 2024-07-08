@@ -123,14 +123,18 @@ div {
 /* 各コマンド */
 #attackCommand:hover,
 #recoveryCommand:hover,
-.enemyCommand:hover {
+.enemyCommand:hover,
+.panchiCommand:hover,
+.slashingCommand:hover {
     cursor: pointer;
 }
 
 /* 各コマンド */
 #attackCommand::before,
 #recoveryCommand::before,
-.enemyCommand::before {
+.enemyCommand::before,
+.panchiCommand::before,
+.slashingCommand::before {
     /* 透明な▶を各コマンドの左に追加 */
     content: "▶";
     opacity: 0;
@@ -139,7 +143,9 @@ div {
 /* 各コマンド */
 #attackCommand:hover::before,
 #recoveryCommand:hover::before,
-.enemyCommand:hover::before {
+.enemyCommand:hover::before,
+.panchiCommand:hover::before,
+.slashingCommand:hover::before {
     /* マウスオーバーで▶を表示 */
     opacity: 100;
 }

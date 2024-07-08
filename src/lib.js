@@ -75,14 +75,23 @@ class Hero
 
 			return livedEnemyHTML;
 		}
-		// 敵が選択されたとき
-		else if(this.command === "enemyCommand") {
-			// 選択された敵をターゲットとして保存する
-			this.target = characters[searchCharacterByName(event.target.innerText)[0]];
-			return "end";
-		}
+
 		// 薬草コマンドが選択されたとき
 		else if(this.command === "recoveryCommand") {
+			return "end";
+		}
+		// 敵が選択されたとき
+		else if(this.command.includes("enemyCommand")) {
+    		// 攻撃の種類を表示するためのHTML
+    		let attackTypeHTML = [];
+			attackTypeHTML.push('<div class="panchiCommand" onclick="selectAttackType(\'打撃\')">打撃</div>');
+			attackTypeHTML.push('<div class="slashingCommand" onclick="selectAttackType(\'斬撃\')">斬撃</div>');
+    		attackTypeHTML.unshift('<div><b id="heroName">' + this.name + '</b></div>');
+
+    		return attackTypeHTML;
+		}
+		// 攻撃の種類が選択されたとき
+		else if(this.command === "panchiCommand" || this.command === "slashingCommand") {
 			return "end";
 		}
 	}
@@ -104,67 +113,142 @@ class Hero
 				element[i].addEventListener("click", command.callback);
 			}
 		}
+		// 敵が選択された場合
+		if(this.command === "enemyCommand") {
+			let element = document.getElementsByClassName("panchiCommand");
+			for(let i = 0; i < element.length; ++i) {
+				element[i].addEventListener("click", command.callback);
+			}
+		}
+		if(this.command === "enemyCommand") {
+			let element = document.getElementsByClassName("slashingCommand");
+			for(let i = 0; i < element.length; ++i) {
+				element[i].addEventListener("click", command.callback);
+			}
+		}
+
 	}
 
 	// 行動する
 	action()
 	{
-		if(this.hp > 0) {
-			// コマンドに応じた処理を行う
-			switch(this.command) {
-				// 攻撃
-				case "enemyCommand":
-					this.attack();
-					break;
-				// 回復
-				case "recoveryCommand":
-					this.recovery();
-					break;
+    	if(this.hp > 0) {
+        	// コマンドに応じた処理を行う
+        	let attackType;
+       		switch(this.command) {
+            	// 攻撃
+            	case "panchiCommand":
+                	attackType = "panchiCommand";
+                	break;
+           		case "slashingCommand":
+                	attackType = "slashingCommand";
+                	break;
+            	case "enemyCommand":
+                	// ここでattackTypeの値を設定するロジックが必要
+					if (this.command === "panchiCommand") {
+						attackType = "panchiCommand";
+					} else if (this.command === "slashingCommand") {
+						attackType = "slashingCommand";
+					}
+            	    break;
+            	// 回復
+            	case "recoveryCommand":
+            	    this.recovery();
+            	    break;
 				default:
 					Message.printMessage(this.name + "はボーッとした<br>");
-			}
-		}
+        	}
+        	switch(attackType) {
+            	// 打撃攻撃
+            	case "panchiCommand":
+					this.target = enemy; // 攻撃対象を敵に設定
+                	this.panchi();
+                	break;
+            	// 斬撃攻撃
+            	case "slashingCommand":
+					this.target = enemy; // 攻撃対象を敵に設定
+                	this.slashing();
+                	break;
+            	default:
+        	}
+    	}
 	}
 
-	// 攻撃する
-	async attack()
-	{
-		// 攻撃相手が生存していれば攻撃する
-		if(this.target.liveFlag) {
-						
-			this.move(); // 攻撃時のキャラの移動
-	
-			// 敵の体力から、自分の攻撃力を引く
-			this.target.hp -= this.offense;
-			
-			// 敵の体力バーを変更する
-			alterLife_enemy(-this.offense*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
-												   // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
+	// 打撃攻撃
+	async panchi()
+	{	
+    	// 攻撃相手が生存していれば攻撃する
+    	if(this.target.liveFlag) {
 		
-			// 攻撃相手の体力がマイナスになる場合は、0にする
-			if(this.target.hp < 0) {
-				this.target.hp = 0;
-			}
-	
-			Message.printMessage(this.name + "の攻撃<br>" +
-								 this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
-		}
-		else {
-			Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
-		}
+    	    this.move(); // 攻撃時のキャラの移動
+
+    	    // 敵の体力から、自分の攻撃力を引く
+    	    this.target.hp -= this.offense;
+		
+    	    // 敵の体力バーを変更する
+    	    alterLife_enemy(-this.offense*0.67); // 体力を100としたときの攻撃力にするため、0.67をかける
+    	                                           // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
+		
+    	    // 攻撃相手の体力がマイナスになる場合は、0にする
+    	    if(this.target.hp < 0) {
+    	        this.target.hp = 0;
+    	    }
+
+    	    Message.printMessage(this.name + "の波乗り<br>" +
+    	                         this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+    	}
+    	else {
+    	    Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
+    	}
+	}
+
+	// 斬撃攻撃する
+	async slashing()
+	{
+    	// 攻撃相手が生存していれば攻撃する
+    	if(this.target.liveFlag) {
+
+			this.move(); // 攻撃時のキャラの移動
+
+        	// 敵の体力から、自分の攻撃力を引く
+        	this.target.hp -= this.offense*2;
+        
+        	// 敵の体力バーを変更する
+        	alterLife_enemy(-this.offense*2); // 体力を100としたときの攻撃力にするため、0.67をかける
+        	                                       // 0.67のように数字を与えるのではなくmaxHPから推測する方法があるかもしれない
+    
+        	// 攻撃相手の体力がマイナスになる場合は、0にする
+        	if(this.target.hp < 0) {
+        	    this.target.hp = 0;
+        	}
+
+        	Message.printMessage(this.name + "の斬撃<br>効果抜群だ！" +
+        	                     this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
+    	}
+    	else {
+        	Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
+    	}
 	}
 	
 	//攻撃時のキャラの移動
 	async move() {
-		// wave.pngを表示する
-		ImageView.innerHTML += '<img id="wave" src="../img/wave.png" style="position:absolute; left:250px; bottom:50px">';
-
-		// 主人公の画像を右に移動させる
-		for(let i = 0; i < 30; i++) {
-			//document.getElementById("heroImage").style.transform = "translateX(" + i + "px)";
-			document.getElementById("wave").style.transform = "translateX(" + i + "px)";
-			await sleep(10);
+		// 打撃攻撃の場合
+		if(this.command === "panchiCommand") {
+			// wave.pngを表示する
+			ImageView.innerHTML += '<img id="wave" src="../img/wave.png" style="position:absolute; left:250px; bottom:50px">';
+			for(let i = 0; i < 30; i++) {
+				document.getElementById("wave").style.transform = "translateX(" + i + "px)";
+				await sleep(10);
+			}
 		}
+		// 斬撃攻撃の場合
+		else if(this.command === "slashingCommand") {
+			for(let i = 0; i < 100; i++) {
+				document.getElementById("heroImage").style.transform = "translateX(" + i + "px)";
+				await sleep(10);
+			}
+		}
+		
 		// effct1の画像を表示する
 		ImageView.innerHTML += '<img id="effect1" src="../img/effect1.png" style="position:absolute; left:350px; bottom:50px">';
 
@@ -216,7 +300,7 @@ class Hero
 		// 薬草をひとつ減らす
 		--this.herb;
 
-		Message.printMessage(this.name + "は薬草を飲んだ<br>体力が" + heal + "回復した！<br>");
+		Message.printMessage(this.name + "は薬草を使った<br>体力が" + heal + "回復した！<br>");
 	}
 }
 
