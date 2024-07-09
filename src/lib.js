@@ -601,8 +601,9 @@ class GameManage
 				// 例えば、勝利画面を表示する場合
 				if (winLose === "win") {
 					// 勝利画面を表示する処理を書く
-					DrawWin();
+					DrawStart();
 					console.log("You win!");
+					// ボタンを押すとDrawwinが呼ばれる
 				} else {
 					// 敗北画面を表示する処理を書く
 					DrawLose();
@@ -620,6 +621,39 @@ function DrawWin() {
 	document.getElementById("gameContainer").innerHTML = '<div id="win"><div id="winMessage"></div></div>';
 	// #winmessageに表示させる
 	document.getElementById("winMessage").innerHTML = "You get a maguro!";
+	// Escapeキーを押すと、DrawStartが呼ばれる
+	document.addEventListener("keydown", function(event) {
+		if(event.key === "Escape") {
+			DrawStart();
+		}
+	});
+}
+
+function DrawLose() {
+	// #gameContainerを変更する
+	document.getElementById("gameContainer").innerHTML = '<div id="lose"><div id="loseMessage"></div></div>';
+	// #losemessageに表示させる
+	document.getElementById("loseMessage").innerHTML = "Game Over...";
+	// Escapeキーを押すと、DrawStartが呼ばれる
+	document.addEventListener("keydown", function(event) {
+		if(event.key === "Escape") {
+			DrawStart();
+		}
+	});
+}
+
+function DrawStart() {
+	// #gameContainerを変更する
+	document.getElementById("gameContainer").innerHTML = '<div id="start"><div id="startMessage"></div><div id="startButton"></div></div>';
+	// #startmessageに表示させる
+	document.getElementById("startMessage").innerHTML = "Click the button to start the game!";
+	// ボタン要素を作成
+    var startButton = document.createElement("button");
+    startButton.innerHTML = "Start";
+    // ボタンにクリックイベントリスナーを追加
+    startButton.onclick = DrawWin;
+    // #startButtonにボタンを追加
+    document.getElementById("startButton").appendChild(startButton);
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

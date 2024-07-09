@@ -38,3 +38,8 @@ https://www.remove.bg/ja/upload
 エフェクトの追加を行ったが、体力バーが減少しないバグが発生
  - コードの位置の問題ではなさそう
  - 更新プログラムを訂正する必要あり
+
+ Drawstartというスタート画面の関数を作成
+  - DrawWinというWin画面、Drawloseというlose画面
+  - それぞれでEscをおすとDrawstartへ遷移
+  - winの場合にDrawstartを呼び出しているので変更する必要あり

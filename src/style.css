@@ -229,3 +229,58 @@ div {
     border-color: white;
     border-radius: 6px;
 }
+
+#lose {
+    display: flex;
+    width: 960px;
+    height: 540px;
+    flex-direction: column; /* 子要素を縦に並べる */
+    align-items: center; /* 子要素を中央に配置 */
+    background-color: red;
+}
+
+#loseMessage {
+    display: inline-block;
+    width: 520px;
+    text-align: center;
+    margin: 5px 0px 0px 0px;
+    padding: 8px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+}
+
+/* 開始画面 */
+#start {
+    display: flex;
+    width: 960px;
+    height: 540px;
+    flex-direction: column; /* 子要素を縦に並べる */
+    align-items: center; /* 子要素を中央に配置 */
+    background-color: greenyellow;
+}
+
+#startMessage {
+    display: inline-block;
+    width: 520px;
+    text-align: center;
+    margin: 5px 0px 0px 0px;
+    padding: 8px 0px 10px 20px;
+    border: 3px solid;
+    border-color: white;
+    border-radius: 6px;
+}
+
+/* 開始ボタンの描画ビュー */
+#startButton {
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    margin: 5px 0px 0px 0px;
+    padding: 8px 0px 10px 20px;
+    border: 3px solid;
+    background-color: black;
+    border-color: white;
+    border-radius: 6px;
+}
