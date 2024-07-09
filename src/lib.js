@@ -596,12 +596,30 @@ class GameManage
 			winLose = this.jadgeWinLose();
 
 			// 決着がついた場合
-			if(winLose === "win" || winLose === "lose") {
+			if (winLose === "win" || winLose === "lose") {
+				// 別の画面を表示する処理を書く
+				// 例えば、勝利画面を表示する場合
+				if (winLose === "win") {
+					// 勝利画面を表示する処理を書く
+					DrawWin();
+					console.log("You win!");
+				} else {
+					// 敗北画面を表示する処理を書く
+					DrawLose();
+					console.log("You lose...");
+				}
 				return false;
 			}
 		}
 		return true;
 	}
+}
+
+function DrawWin() {
+	// #gameContainerを変更する
+	document.getElementById("gameContainer").innerHTML = '<div id="win"><div id="winMessage"></div></div>';
+	// #winmessageに表示させる
+	document.getElementById("winMessage").innerHTML = "You get a maguro!";
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
