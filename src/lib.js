@@ -209,16 +209,24 @@ class Hero
 
 				// 敵の体力バーを変更する
 				alterLife_enemy(-fishhealth); 
+
+				Message.printMessage(this.name + "の波乗り<br>効果抜群だ！" +
+									this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+			}
+			else if(this.target instanceof Meat) {
+				let meathealth = this.offense;
+				this.target.hp -= this.offense*2;
+				alterLife_enemy(-meathealth*2);
+								
+				Message.printMessage(this.name + "の波乗り<br>" +
+									this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
 			}
 
     	    // 攻撃相手の体力がマイナスになる場合は、0にする
     	    if(this.target.hp < 0) {
     	        this.target.hp = 0;
     	    }
-
-    	    Message.printMessage(this.name + "の波乗り<br>" +
-    	                         this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
-    	}
+		}
     	else {
     	    Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
     	}
@@ -242,16 +250,23 @@ class Hero
 
 				// 敵の体力バーを変更する
 				alterLife_enemy(-fishhealth*2); 
-			}
 
+				Message.printMessage(this.name + "の斬撃<br>効果抜群だ！" +
+									this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
+			}
+			else if(this.target instanceof Meat) {
+				let meathealth = this.offense;
+				this.target.hp -= this.offense;
+				alterLife_enemy(-meathealth);
+
+				Message.printMessage(this.name + "の斬撃<br>" +
+									this.target.name + "に" + this.offense + "のダメージを与えた！<br>");
+			}
         	// 攻撃相手の体力がマイナスになる場合は、0にする
         	if(this.target.hp < 0) {
         	    this.target.hp = 0;
         	}
-
-        	Message.printMessage(this.name + "の斬撃<br>効果抜群だ！" +
-        	                     this.target.name + "に" + this.offense*2 + "のダメージを与えた！<br>");
-    	}
+		}
     	else {
         	Message.printMessage(this.name + "の攻撃・・・<br>" + this.target.name + "は倒れている<br>");
     	}
@@ -407,9 +422,48 @@ class Fish extends Enemy
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ミートクラス
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+class Meat extends Enemy
+{
+	// コンストラクタ
+	constructor(name, hp, offense, speed, path)
+	{
+		super(name, hp, offense, speed, path);
+	}
+
+	// 攻撃メソッド
+	attack()
+	{
+		// 生存している味方をランダムに選択する
+		let f = characters[searchLivedcharacterRamdom("hero")];
+
+		// 攻撃対象の体力から、自分の攻撃力を引く
+		f.hp -= this.offense;
+
+		// 攻撃対象の体力バーを変更する
+		alterLife_hero(-this.offense*0.5);
+
+		// 攻撃相手の体力がマイナスになる場合は0にする
+		if(f.hp < 0) {
+			f.hp = 0;
+		}
+
+		// 攻撃相手が生存していれば攻撃
+		if(f.liveFlag) {
+			Message.printMessage(this.name + "が襲いかかってきた<br>" +
+			                     f.name + "は" + this.offense + "のダメージを受けた！<br>");
+		}
+		else {
+			Message.printMessage(this.name + "の攻撃・・・<br>" + f.name + "は倒れている<br>");
+		}
+	}
+}
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 調理後画像クラス
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-class CookedFish extends Enemy
+class Item extends Enemy
 {
 	// コンストラクタ
 	constructor(name, path)
@@ -446,6 +500,15 @@ class GameManage
 
 		// はじめのメッセージを表示する
 		this.showFirstMessage();
+
+		// Mを押すとBGMが流れる
+		// BGM用のAudioオブジェクトを初期化
+        this.bgm = new Audio('../music/battle1.mp3');
+		document.addEventListener('keydown', (event) => {
+			if(event.key === 'm') {
+				this.playBGM();
+			}
+		});
 	}
 
 	// 行動の順番を決める
@@ -538,8 +601,9 @@ class GameManage
 				if(characters[c].type === "enemy") {
 					document.getElementById("enemyImage" + c).remove();
 					
-					// 新しい画像を表示する maguro.png
-					ImageView.innerHTML += '<img id="enemyImage" src="C:/Battle_js/commandbattle/img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
+					// 新しい画像を表示する 
+					ImageView.innerHTML += '<img id="enemyImage" src="../img/maguro.png" style="position:absolute; left:350px; bottom:50px">';
+					ImageView.innerHTML += '<img id="enemyImage" src="../img/gyuniku.png" style="position:absolute; left:350px; bottom:50px">';
 				}
 			}
 		}
@@ -597,63 +661,40 @@ class GameManage
 
 			// 決着がついた場合
 			if (winLose === "win" || winLose === "lose") {
+				// BGMを止める
+				this.stopBGM();
+
 				// 別の画面を表示する処理を書く
 				// 例えば、勝利画面を表示する場合
 				if (winLose === "win") {
 					// 勝利画面を表示する処理を書く
-					DrawStart();
+					//マウスをクリックをするとDrawWinが呼ばれる
+					document.addEventListener("click", DrawWin);
 					console.log("You win!");
-					// ボタンを押すとDrawwinが呼ばれる
 				} else {
 					// 敗北画面を表示する処理を書く
-					DrawLose();
-					console.log("You lose...");
+					//マウスをクリックをするとDrawLoseが呼ばれる
+					document.addEventListener("click", DrawLose);
+					console.log("You lose...!");
 				}
 				return false;
 			}
 		}
 		return true;
 	}
-}
 
-function DrawWin() {
-	// #gameContainerを変更する
-	document.getElementById("gameContainer").innerHTML = '<div id="win"><div id="winMessage"></div></div>';
-	// #winmessageに表示させる
-	document.getElementById("winMessage").innerHTML = "You get a maguro!";
-	// Escapeキーを押すと、DrawStartが呼ばれる
-	document.addEventListener("keydown", function(event) {
-		if(event.key === "Escape") {
-			DrawStart();
+	// BGMを再生する
+	playBGM() {
+		if (this.bgm.paused) {
+			this.bgm.play();
 		}
-	});
-}
+	}
 
-function DrawLose() {
-	// #gameContainerを変更する
-	document.getElementById("gameContainer").innerHTML = '<div id="lose"><div id="loseMessage"></div></div>';
-	// #losemessageに表示させる
-	document.getElementById("loseMessage").innerHTML = "Game Over...";
-	// Escapeキーを押すと、DrawStartが呼ばれる
-	document.addEventListener("keydown", function(event) {
-		if(event.key === "Escape") {
-			DrawStart();
-		}
-	});
-}
-
-function DrawStart() {
-	// #gameContainerを変更する
-	document.getElementById("gameContainer").innerHTML = '<div id="start"><div id="startMessage"></div><div id="startButton"></div></div>';
-	// #startmessageに表示させる
-	document.getElementById("startMessage").innerHTML = "Click the button to start the game!";
-	// ボタン要素を作成
-    var startButton = document.createElement("button");
-    startButton.innerHTML = "Start";
-    // ボタンにクリックイベントリスナーを追加
-    startButton.onclick = DrawWin;
-    // #startButtonにボタンを追加
-    document.getElementById("startButton").appendChild(startButton);
+	// BGMを停止する（必要に応じて）
+	stopBGM() {
+		this.bgm.pause();
+		this.bgm.currentTime = 0;
+	}
 }
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

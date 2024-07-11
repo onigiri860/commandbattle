@@ -43,3 +43,6 @@ https://www.remove.bg/ja/upload
   - DrawWinというWin画面、Drawloseというlose画面
   - それぞれでEscをおすとDrawstartへ遷移
   - winの場合にDrawstartを呼び出しているので変更する必要あり
+
+game -> win(lose) -> start -> gameでは最後のgame、つまり2回目のゲームの登場でエラーが発生
+gameを最初に持ってこないとうまく表示されない
