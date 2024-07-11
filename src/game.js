@@ -1,6 +1,6 @@
 // キャラクターをインスタンス化する
 let hero  = new Hero("シェフ", 200, 50, 20, 3, 30, "../img/chef.png"  );  // 主人公
-//let fish  = new Fish("さかな", 100, 40, 10,       "../img/sakana.png");  // まぐろ
+//let enemy  = new Fish("さかな", 100, 40, 10,       "../img/sakana.png");  // まぐろ
 let enemy = new Meat("うし"  , 100, 40, 10,       "../img/usi.png"   );  // うし
 //let item  = new Item("まぐろ", "../img/maguro.png");      // まぐろ刺身
 let item2 = new Item("牛肉"  , "../img/gyuniku.png");     // 牛肉
