@@ -38,13 +38,6 @@ function ResetGame() {
 function DrawStart() {
 	// #startmessageに表示させる
 	document.getElementById("startMessage").innerHTML = "Click the button to start the game!";
-	// ボタン要素を作成
-    var startButton = document.createElement("button");
-    startButton.innerHTML = "Start";
-    // ボタンにクリックイベントリスナーを追加
-    startButton.onclick = DrawGame;
-    // #startButtonにボタンを追加
-    document.getElementById("startButton").appendChild(startButton);
 }
 
 function DrawGame() {
